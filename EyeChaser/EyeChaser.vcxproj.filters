@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{a3a26a0e-33c5-411c-9758-efd732cab77d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default">
+      <UniqueIdentifier>{a58f8838-4eb9-4f6f-8a33-0839137addb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Engine\01. Header">
+      <UniqueIdentifier>{8e7b9729-44fd-4452-b965-ad638cbd664a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\02. Core">
+      <UniqueIdentifier>{a7004348-882a-468f-91e4-42a2d5fe57bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager">
+      <UniqueIdentifier>{faaa1ca4-bd80-40c0-83d8-39a14ab1f7a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object">
+      <UniqueIdentifier>{066ad5b8-39cd-44ea-889a-c7e97cab8819}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager\ResMgr">
+      <UniqueIdentifier>{ee076a3c-5b39-405a-a058-a60d0cecd640}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager\KeyMgr">
+      <UniqueIdentifier>{34fdb4d4-f395-452d-b8da-06c108fc9ad5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Character">
+      <UniqueIdentifier>{32852606-932f-4a1a-9e8f-46da89cb55e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Background">
+      <UniqueIdentifier>{4aae9477-bb1a-4f1e-9018-d27150700652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\01. Header\Image">
+      <UniqueIdentifier>{c4c75cb0-2111-458f-b109-9a4aba15f898}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CCore.h">
+      <Filter>Engine\02. Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GazeCommission.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="global.h">
+      <Filter>Engine\01. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>Engine\01. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="struct.h">
+      <Filter>Engine\01. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CObject.h">
+      <Filter>Engine\04. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CKeyMgr.h">
+      <Filter>Engine\03. Manager\KeyMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="func.h">
+      <Filter>Engine\01. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CChar.h">
+      <Filter>Engine\04. Object\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="CResMgr.h">
+      <Filter>Engine\03. Manager\ResMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene.h" />
+    <ClInclude Include="CBackground.h">
+      <Filter>Engine\04. Object\Background</Filter>
+    </ClInclude>
+    <ClInclude Include="CIris.h">
+      <Filter>Engine\04. Object\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="CSclera.h">
+      <Filter>Engine\04. Object\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="BackgroundImg.h">
+      <Filter>Engine\01. Header\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Images.h">
+      <Filter>Engine\01. Header\Image</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CCore.cpp">
+      <Filter>Engine\02. Core</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="CObject.cpp">
+      <Filter>Engine\04. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CKeyMgr.cpp">
+      <Filter>Engine\03. Manager\KeyMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CChar.cpp">
+      <Filter>Engine\04. Object\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="CResMgr.cpp">
+      <Filter>Engine\03. Manager\ResMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CScene.cpp" />
+    <ClCompile Include="CBackground.cpp">
+      <Filter>Engine\04. Object\Background</Filter>
+    </ClCompile>
+    <ClCompile Include="CIris.cpp">
+      <Filter>Engine\04. Object\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="CSclera.cpp">
+      <Filter>Engine\04. Object\Character</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GazeCommission.rc">
+      <Filter>Default\리소스 파일</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Default\리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="myicon.ico">
+      <Filter>Default\리소스 파일</Filter>
+    </Image>
+    <Image Include="myicon_big.ico">
+      <Filter>Default\리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
