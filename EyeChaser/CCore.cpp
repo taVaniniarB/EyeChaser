@@ -5,6 +5,7 @@
 #include "CScene.h"
 #include "CChar.h"
 #include "CBackground.h"
+#include "resource.h"
 
 CCore::CCore()
 	: m_hWnd(0)
@@ -20,10 +21,9 @@ CCore::~CCore()
 {
 }
 
-int CCore::init(HWND _hWnd, POINT _ptResolution)
+int CCore::init(HWND _hWnd, HINSTANCE _hInst, POINT _ptResolution)
 {
 	m_iratio = (float)WINDOW_SIZE / (float)CANVAS_SIZE;
-
 
 	// GDI+ 초기화
 	ULONG_PTR gdiplusToken = 0;
@@ -31,6 +31,7 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 	Gdiplus::GdiplusStartup(&gdiplusToken, &gdistartupinput, nullptr);
 
 	m_hWnd = _hWnd;
+	m_hInst = _hInst;
 	m_ptResolution = _ptResolution;
 
 	// 입력받은 해상도에 맞게 윈도우 크기 조절
@@ -61,60 +62,57 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 
 void CCore::progress()
 {
-	// ==============
-	// Manager Update
-	// ==============
 	CKeyMgr::GetInst()->update(); // 키 상태 체크
 
-	// ============
-	// Scene Update
-	// ============
 	CScene::GetInst()->update(); // 현재 씬 돌리기
 
+	// 화면 클리어
+	RECT rt = { 0, 0, m_ptResolution.x, m_ptResolution.y };
+	FillRect(m_memDC, &rt, (HBRUSH)GetStockObject(WHITE_BRUSH));
 
-	// ==========
-	// Rendering
-	// ==========
-	// 화면 Clear
-	Rectangle(m_memDC, -1, -1, m_ptResolution.x + 1, m_ptResolution.y + 1);
-
-
-	// ==========
-	// 제목표시줄
-	// ==========
-
-	wchar_t szBuffer[255] = {};
 	HWND hWnd = GetFocus();
-
-	// 포커스 O
 	if (nullptr != hWnd)
 	{
 		isFocused = true;
-		swprintf_s(szBuffer, FOCUSED_TEXT);
 	}
 	else
 	{
 		isFocused = false;
-		if (m_bMousetracking)
+	}
+
+	// 제목표시줄 업데이트
+	static bool prevFocused = false; // false로 초기화 (첫 실행 시 업데이트 보장)
+	static bool prevMouseTracking = !m_bMousetracking; // 현재 값과 다르게 초기화
+	bool curFocused = (hWnd != nullptr);
+
+	// 포커스 상태나 마우스트래킹 모드가 변경되었을 때만 타이틀 업데이트
+	if (curFocused != prevFocused || m_bMousetracking != prevMouseTracking)
+	{
+		wchar_t szBuffer[32] = {};
+		if (curFocused)
 		{
-			swprintf_s(szBuffer, UNFOCUSED_TEXT);
+			LoadStringW(m_hInst, IDS_FOCUSED_TEXT, szBuffer, _countof(szBuffer));
 		}
 		else
-			swprintf_s(szBuffer, FOCUSED_TEXT);
+		{
+			if (m_bMousetracking)
+				LoadStringW(m_hInst, IDS_UNFOCUSED_TEXT, szBuffer, _countof(szBuffer));
+			else
+				LoadStringW(m_hInst, IDS_FOCUSED_TEXT, szBuffer, _countof(szBuffer));
+		}
+		SetWindowText(m_hWnd, szBuffer);
+		prevFocused = curFocused;
+		prevMouseTracking = m_bMousetracking;
 	}
 
-	/*
-	// 배경에 따른 표정변화
-	if (1 == m_pScene->m_pBackground->GetIdx())
+	static Gdiplus::Graphics* graphics = nullptr;
+	if (!graphics)
 	{
-		m_pScene->m_pCharacter->SetIdx(2);
-		swprintf_s(szBuffer, BLACK_TEXT);
+		graphics = new Gdiplus::Graphics(m_memDC);
+		graphics->SetInterpolationMode(Gdiplus::InterpolationModeHighQuality);
+		//graphics->SetPixelOffsetMode(Gdiplus::PixelOffsetModeHighQuality);
 	}
-	*/
-
-	SetWindowText(CCore::GetInst()->GetMainHwnd(), szBuffer);
-
-	CScene::GetInst()->render(m_memDC);
+	CScene::GetInst()->render(m_memDC, graphics);
 
 	BitBlt(m_hDC, 0, 0, m_ptResolution.x, m_ptResolution.y
 		, m_memDC, 0, 0, SRCCOPY);

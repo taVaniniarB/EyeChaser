@@ -17,12 +17,11 @@ CIris::~CIris()
 void CIris::update()
 {
 	Vec2 mousePos = MOUSE_POS;
-
 	float dx = mousePos.x - m_CenterPos.x;
 	float dy = mousePos.y - m_CenterPos.y + (EYE_ADJUST * m_ratio);
 	float dist = sqrt(dx * dx + dy * dy);
-
 	float angle = atan2(dy, dx);
+
 	float maxDistX = ((LEYE_WIDTH * m_ratio) / 2 - (PUPIL_RADIUS * m_ratio)) * cos(angle);
 	float maxDistY = ((LEYE_HEIGHT * m_ratio) / 2 - (PUPIL_RADIUS * m_ratio)) * sin(angle);
 
@@ -31,32 +30,38 @@ void CIris::update()
 		dy = maxDistY;
 	}
 
-	float pupilX = m_CenterPos.x + static_cast<int>(dx);
-	float pupilY = m_CenterPos.y + (EYE_ADJUST * m_ratio) + static_cast<int>(dy);
+	float targetX = m_CenterPos.x + dx;
+	float targetY = m_CenterPos.y + (EYE_ADJUST * m_ratio) + dy;
 
-	SetPos(Vec2(pupilX, pupilY));
+	// 선형 보간으로 부드럽게 (0.3은 속도 조절값, 0~1 사이)
+	Vec2 currentPos = GetPos();
+	float smoothX = currentPos.x + (targetX - currentPos.x) * 0.5f;
+	float smoothY = currentPos.y + (targetY - currentPos.y) * 0.5f;
+
+	if (abs(targetX - smoothX) < 0.1f) smoothX = targetX;
+	if (abs(targetY - smoothY) < 0.1f) smoothY = targetY;
+
+	SetPos(Vec2(smoothX, smoothY));
 }
 
 void CIris::SetScale()
 {
-	UINT iWidth = m_pTex->GetWidth();
-	UINT iHeight = m_pTex->GetHeight();
-	UINT irisScaleX = iWidth / IRIS_TEX_NUM;
+	float iWidth = static_cast<float>(m_pTex->GetWidth());
+	float iHeight = static_cast<float>(m_pTex->GetHeight());
+	float irisScaleX = iWidth / static_cast<float>(IRIS_TEX_NUM);
 	CObject::SetScale(Vec2(irisScaleX, iHeight) * m_ratio);
 }
 
 void CIris::SetScale(bool changeScale)
 {
-	UINT iWidth = m_pTex->GetWidth();
-	UINT iHeight = m_pTex->GetHeight();
-	UINT irisScaleX = iWidth / IRIS_TEX_NUM;
-	CObject::SetScale(Vec2(irisScaleX, iHeight) * EYE_ADJUST * m_ratio);
+	float iWidth = static_cast<float>(m_pTex->GetWidth());
+	float iHeight = static_cast<float>(m_pTex->GetHeight());
+	float irisScaleX = iWidth / static_cast<float>(IRIS_TEX_NUM);
+	CObject::SetScale(Vec2(irisScaleX, iHeight) * EYE_ADJUST * changeScale);
 }
 
-void CIris::render(HDC _dc)
+void CIris::render(HDC _dc, Gdiplus::Graphics* graphics)
 {
-	Gdiplus::Graphics graphics(_dc);
-
 	UINT iWidth = m_pTex->GetWidth();
 	UINT iHeight = m_pTex->GetHeight();
 
@@ -64,10 +69,6 @@ void CIris::render(HDC _dc)
 
 	// 타일 파일 높이에 따른 최대 열 개수
 	UINT iMaxCol = IRIS_TEX_NUM;
-	// UINT iMaxCol = (UINT)(iWidth / IRIS_SCALE_X);
-
-	//행 개수(쓰는 이유: 인덱스 초과 예외처리)
-	// UINT iMaxRow = (UINT)(iHeight / IRIS_SCALE_Y);
 
 	UINT iCurRow = (UINT)(m_iImgIdx / iMaxCol);
 	UINT iCurCol = (UINT)(m_iImgIdx % iMaxCol);
@@ -86,16 +87,17 @@ void CIris::render(HDC _dc)
 		, (int)(iHeight));
 
 	// 대상 위치를 지정
-	Rect destRect((int)(vPos.x - vScale.x / 2)
+
+	// 대상 위치를 지정
+	int renderX = static_cast<int>(vPos.x);
+	int renderY = static_cast<int>(vPos.y);
+	Rect destRect(renderX - vScale.x / 2, renderY - vScale.y / 2,
+		(int)(vScale.x), (int)(vScale.y)); 
+	/*Rect destRect((int)(vPos.x - vScale.x / 2)
 		, (int)(vPos.y - vScale.y / 2)
 		, (int)(vScale.x)
-		, (int)(vScale.y));
+		, (int)(vScale.y));*/
 
 	// 이미지를 잘라서 그리기
-	graphics.DrawImage(m_pTex, destRect, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, UnitPixel);
+	graphics->DrawImage(m_pTex, destRect, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, UnitPixel);
 }
-/*
-void CIris::SetScale(Vec2 _vScale)
-{
-	CObject::SetScale(_vScale * m_ratio);
-}*/

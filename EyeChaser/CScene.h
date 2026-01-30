@@ -15,7 +15,7 @@ public:
 
 public:
 	virtual void update();
-	virtual void render(HDC _dc);
+	virtual void render(HDC _dc, Gdiplus::Graphics* graphics);
 
 	virtual void Enter();
 

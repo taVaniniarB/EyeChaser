@@ -1,6 +1,6 @@
 #include "CObject.h"
 
-void CObject::render(HDC _dc)
+void CObject::render(HDC _dc, Gdiplus::Graphics* graphics)
 {
 	Rectangle(_dc
 		, (int)(m_vPos.x - m_vScale.x / 2.f)

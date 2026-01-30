@@ -14,7 +14,7 @@ private:
 
 public:
 	virtual void update();
-	virtual void render(HDC _dc);
+	virtual void render(HDC _dc, Gdiplus::Graphics* graphics);
 	void SetCenterPos(Vec2 _vPos) { m_CenterPos = _vPos; }
 	virtual void SetScale();
 	virtual void SetScale(bool changeScale);

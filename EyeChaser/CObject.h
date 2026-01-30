@@ -32,7 +32,7 @@ public:
 	// 순수 가상함수화
 	// 모든 Object 파생 클래스들은 자기만의 업데이트를 구현하도록 강제한다
 	virtual void update() = 0;
-	virtual void render(HDC _dc);
+	virtual void render(HDC _dc, Gdiplus::Graphics* graphics);
 
 public:
 

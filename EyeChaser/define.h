@@ -1,20 +1,20 @@
 ﻿#pragma once
-// 종료창 ……
-#define EXIT_WINDOW true
-#define CLOSE_DIALOG_TITLE L"SYSTEM"
-#define CLOSE_DIALOG L"정말 종료하시겠습니까?"
-
 // 창 텍스트
-#define FOCUSED_TEXT L"Lacus Clyne"
-#define UNFOCUSED_TEXT L"Mia"
+#define FOCUSED_TEXT L"포커스 타이틀"
+#define UNFOCUSED_TEXT L"포커스 해제 타이틀"
+
+// 종료창 …… ⋯⋯
+#define EXIT_WINDOW false
+#define CLOSE_DIALOG_TITLE L" "
+#define CLOSE_DIALOG L" "
 
 // 눈 이동영역 너비, 높이
 // 40 / 35
 #define LEYE_WIDTH 38.f
-#define LEYE_HEIGHT 32.f
+#define LEYE_HEIGHT 31.f
 
 // 값을 올릴 수록 미포커스 시 눈동자 아래로 내려감
-#define EYE_ADJUST -1.5f
+#define EYE_ADJUST -1.f
 
 #define LEYE_CENTERPOS_Y 155.f // 눈 높이
 #define EYEOFFSET 37.f // 미간

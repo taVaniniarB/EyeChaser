@@ -138,14 +138,12 @@ void CChar::update()
 
 }
 
-void CChar::render(HDC _dc)
+void CChar::render(HDC _dc, Gdiplus::Graphics* graphics)
 {
-	m_pSclera->render(_dc);
-	m_pRIris->render(_dc);
-	m_pLIris->render(_dc);
+	m_pSclera->render(_dc, graphics);
+	m_pRIris->render(_dc, graphics);
+	m_pLIris->render(_dc, graphics);
 
-
-	Gdiplus::Graphics graphics(_dc);
 
 	UINT iWidth = m_pTex->GetWidth();
 	UINT iHeight = m_pTex->GetHeight();
@@ -176,5 +174,5 @@ void CChar::render(HDC _dc)
 		, (int)(vScale.y));
 
 	// 이미지를 잘라서 그리기
-	graphics.DrawImage(m_pTex, destRect, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, UnitPixel);
+	graphics->DrawImage(m_pTex, destRect, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, UnitPixel);
 }

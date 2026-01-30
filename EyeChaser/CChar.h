@@ -27,7 +27,7 @@ public:
 public:
 	void init();
 	virtual void update();
-	virtual void render(HDC _dc);
+	virtual void render(HDC _dc, Gdiplus::Graphics* graphics);
 	void SetIdx(int _idx) { m_iImgIdx = _idx; }
 
 

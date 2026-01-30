@@ -3,6 +3,7 @@
 #include "EyeChaser.h"
 
 #include "CCore.h"
+#pragma comment(lib, "winmm.lib")
 
 #define MAX_LOADSTRING 100
 
@@ -46,7 +47,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     //core 객체 초기화
-    if (FAILED(CCore::GetInst()->init(g_hWnd, POINT{ WINDOW_SIZE, WINDOW_SIZE })))
+    if (FAILED(CCore::GetInst()->init(g_hWnd, hInst, POINT{ WINDOW_SIZE, WINDOW_SIZE })))
     {
         MessageBox(nullptr, L"Core 객체 초기화 실패", L"ERROR", MB_OK);
 
@@ -58,13 +59,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MSG msg;
 
     // 기본 메시지 루프입니다:
+    timeBeginPeriod(1);
+
+    DWORD prevTime = GetTickCount64();
     while (true)
     {
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {
             if (msg.message == WM_QUIT)
                 break;
-
             if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
             {
                 TranslateMessage(&msg);
@@ -73,9 +76,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
         else
         {
-            CCore::GetInst()->progress();
+            DWORD curTime = GetTickCount64();
+            if (curTime - prevTime >= 33)
+            {
+                CCore::GetInst()->progress();
+                prevTime = curTime;
+            }
+            else
+            {
+                Sleep(1);
+            }
         }
     }
+
+    // 프로그램 종료 시
+    timeEndPeriod(1);
 
     return (int)msg.wParam;
 }
@@ -147,6 +162,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message)
     {
+    case WM_ERASEBKGND:
+        // 배경 지우기를 건너뛰고 직접 처리함을 알림
+        return 1;
+
     case WM_CREATE:
     {
         // 아이콘
@@ -159,11 +178,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_RBUTTONDOWN: {
         // 우클릭 시 팝업 메뉴 표시
 
-
         HMENU hMenu = LoadMenu(GetModuleHandle(NULL), MAKEINTRESOURCE(IDR_MENU1));
         if (hMenu) {
             HMENU hSubMenu = GetSubMenu(hMenu, 0);
-
 
             if (isAlwaysOnTop) {
                 CheckMenuItem(hSubMenu, ID_TOGGLE_ALWAYS_ON_TOP, MF_CHECKED);
@@ -172,15 +189,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 CheckMenuItem(hSubMenu, ID_TOGGLE_ALWAYS_ON_TOP, MF_UNCHECKED);
             }
 
-
-
             if (isMousetracking) {
                 CheckMenuItem(hSubMenu, ID_MOUSETRACKIG, MF_CHECKED);
             }
             else {
                 CheckMenuItem(hSubMenu, ID_MOUSETRACKIG, MF_UNCHECKED);
             }
-
 
             if (hSubMenu) {
                 POINT pt;
@@ -227,16 +241,43 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     break;
     // 종료 다이얼로그
-    case WM_CLOSE: {
-        // 종료 확인 대화 상자 표시
+    case WM_CLOSE:
+    {
         if (EXIT_WINDOW)
         {
-            int result = MessageBox(hWnd, CLOSE_DIALOG, CLOSE_DIALOG_TITLE, MB_YESNO);
-            if (result == IDYES) {
+            WCHAR szDialog[512] = {};
+            WCHAR szTitle[128] = {};
+
+            LoadStringW(hInst, IDS_CLOSE_DIALOG, szDialog, _countof(szDialog));
+            LoadStringW(hInst, IDS_CLOSE_DIALOG_TITLE, szTitle, _countof(szTitle));
+
+            int result = MessageBoxW(
+                hWnd,
+                szDialog,
+                szTitle,
+                MB_YESNO
+            );
+            switch (result)
+            {
+            case IDYES:
                 DestroyWindow(hWnd);
+                break;
+            case IDCANCEL:
+                // TODO: add code
+                break;
+            case IDTRYAGAIN:
+                // TODO: add code
+                break;
+            case IDCONTINUE:
+                // TODO: add code
+                break;
             }
-            break;
         }
+        else
+        {
+            DestroyWindow(hWnd);
+        }
+        break;
     }
     case WM_DESTROY:
         PostQuitMessage(0);

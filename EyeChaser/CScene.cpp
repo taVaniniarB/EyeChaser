@@ -33,10 +33,10 @@ void CScene::update()
 	}
 }
 
-void CScene::render(HDC _dc)
+void CScene::render(HDC _dc, Gdiplus::Graphics* graphics)
 {
-	m_pBackground->render(_dc);
-	m_pCharacter->render(_dc);
+	m_pBackground->render(_dc, graphics);
+	m_pCharacter->render(_dc, graphics);
 }
 
 void CScene::Enter()

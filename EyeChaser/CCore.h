@@ -6,6 +6,7 @@ class CCore
 	SINGLE(CCore);
 private:
 	HWND	m_hWnd;			// 메인 윈도우 핸들
+	HINSTANCE m_hInst;
 	POINT	m_ptResolution; // 메인 윈도우 해상도
 	HDC		m_hDC;			// 메인 윈도우에 Draw 할 DC
 
@@ -21,7 +22,7 @@ private:
 
 public: //코어 클래스의 초기화 함수를 만들자
 //실패 체크 위해 정수 값 반환하자
-	int init(HWND _hWnd, POINT _ptResolution);
+	int init(HWND _hWnd, HINSTANCE _hInst, POINT _ptResolution);
 	void progress(); //메시지가 없는 동안의 코어 클래스의 작업
 	bool GetIsFocused() { return isFocused; }
 	float GetRatio() { return m_iratio; }

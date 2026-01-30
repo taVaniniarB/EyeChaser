@@ -16,6 +16,12 @@
 #define ID_MOUSETRACKIG                 32771
 #define ID_TOGGLE_ALWAYS_ON_TOP         40001
 #define ID_CANCEL_ALWAYS_ON_TOP         40002
+
+#define IDS_FOCUSED_TEXT				1001
+#define IDS_UNFOCUSED_TEXT				1002
+
+#define IDS_CLOSE_DIALOG_TITLE			1003
+#define IDS_CLOSE_DIALOG				1004
 #define IDC_STATIC                      -1
 
 
