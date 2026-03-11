@@ -1,7 +1,8 @@
 ## Eye Chaser
 
 캐릭터의 시선이 마우스를 따라가는 프로그램
-![img](https://imgur.com/a/2Ce1ktk)
+
+![Image](https://github.com/user-attachments/assets/92edb03b-c9b6-4e0b-8d67-70a2502e2c50)
 
 
 ### 기능
@@ -13,7 +14,8 @@
 **클라이언트 창 포커스 여부에 따른 텍스처 변화**
 
 **우클릭 메뉴**
-![menu](https://imgur.com/ZmDbAm7)
+
+![menu](https://imgur.com/ZmDbAm7.png)
 
 * Always On Top 속성 토글 (창을 항상 최상단에 표시)
 * 마우스트래킹 토글
