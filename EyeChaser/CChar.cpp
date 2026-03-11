@@ -20,6 +20,7 @@ CChar::CChar()
 	SetScale(Vec2(WINDOW_SIZE, WINDOW_SIZE));
 	m_changeFace = (charimageWidth / 300) > 1 ? true : false;
 	m_changeSclera = (scleraimageWidth / 300) > 1 ? true : false;
+	LOG("캐릭터 생성: " + std::to_string(GetPos().x) + ", " + std::to_string(GetPos().y));
 }
 
 CChar::~CChar()
@@ -31,7 +32,6 @@ CChar::~CChar()
 void CChar::init()
 {
 	float ratio = CCore::GetInst()->GetRatio();
-
 
 	// SCLERA
 	m_pSclera = new CSclera();
@@ -47,9 +47,7 @@ void CChar::init()
 	m_pRIris->SetTexture(pImage);
 	m_pRIris->SetScale();
 	//m_pRIris->SetScale(Vec2(IRIS_SCALE_X, IRIS_SCALE_Y));
-	m_pRIris->SetPos(Vec2(REYE_CENTERPOS_X * ratio, REYE_CENTERPOS_Y * ratio));
-	m_pRIris->SetCenterPos(Vec2(REYE_CENTERPOS_X * ratio, REYE_CENTERPOS_Y * ratio));
-
+	m_pRIris->SetCenterPos(Vec2(REYE_CENTERPOS_X * ratio + 1, REYE_CENTERPOS_Y * ratio));
 
 
 	// LEFT IRIS
@@ -58,9 +56,11 @@ void CChar::init()
 	m_pLIris->SetTexture(pImage);
 	m_pLIris->SetScale();
 	//m_pLIris->SetScale(Vec2(IRIS_SCALE_X, IRIS_SCALE_Y));
-	m_pLIris->SetPos(Vec2(LEYE_CENTERPOS_X * ratio, LEYE_CENTERPOS_Y * ratio));
 	m_pLIris->SetCenterPos(Vec2(LEYE_CENTERPOS_X * ratio, LEYE_CENTERPOS_Y * ratio));
 
+	SetIrisPositionCenter(ratio);
+	LOG("L: " + std::to_string(m_pLIris->GetPos().x) + ", " + std::to_string(m_pLIris->GetPos().y));
+	LOG("R: " + std::to_string(m_pRIris->GetPos().x) + ", " + std::to_string(m_pRIris->GetPos().y));
 
 	m_pRIris->SetImgIdx(0);
 	m_pLIris->SetImgIdx(0);
@@ -70,72 +70,88 @@ void CChar::update()
 {
 	float ratio = CCore::GetInst()->GetRatio();
 
-	// 포커스 O
+#if _DEBUG
+	if (KEY_TAP(KEY::SPACE)) debug = !debug;
+#endif
+
 	if (CCore::GetInst()->GetIsFocused())
 	{
-		if (m_changeFace)
-		{
-			m_iImgIdx = 0;
-		}
-
-		m_pRIris->SetPos(Vec2(REYE_CENTERPOS_X * ratio, REYE_CENTERPOS_Y * ratio));
-		m_pLIris->SetPos(Vec2(LEYE_CENTERPOS_X * ratio, LEYE_CENTERPOS_Y * ratio));
-
-		if (CHANGE_IRIS)
-		{
-			if (((IRIS_CHANGE_MODE)&SCALE) == SCALE)
-			{
-				m_pRIris->SetScale();
-				m_pLIris->SetScale();
-				//m_pRIris->SetScale(Vec2(IRIS_SCALE_X, IRIS_SCALE_Y));
-				//m_pLIris->SetScale(Vec2(IRIS_SCALE_X, IRIS_SCALE_Y));
-			}
-			if (((IRIS_CHANGE_MODE)&TEXTURE) == TEXTURE)
-			{
-				m_pRIris->SetImgIdx(0);
-				m_pLIris->SetImgIdx(0);
-			}
-		}
-
-		if (m_changeSclera)
-		{
-			m_pSclera->SetImgIdx(0);
-		}
+		Focus(ratio);
 	}
 	else
 	{
-		if (CCore::GetInst()->GetMTMode())
+		UnFocus();
+	}
+}
+
+void CChar::UnFocus()
+{
+	if (!CCore::GetInst()->GetMTMode()) return;
+
+	if (m_changeFace)
+	{
+		m_iImgIdx = 1;
+	}
+
+	m_pRIris->update();
+	m_pLIris->update();
+
+	/*if (CHANGE_IRIS)
+	{
+	if (((IRIS_CHANGE_MODE)&SCALE) == SCALE)
+	{
+	m_pRIris->SetScale(true);
+	m_pLIris->SetScale(true);
+	}
+	if (((IRIS_CHANGE_MODE)&TEXTURE) == TEXTURE)
+	{
+	m_pRIris->SetImgIdx(1);
+	m_pLIris->SetImgIdx(1);
+	}
+	}*/
+
+	if (m_changeSclera)
+	{
+		m_pSclera->SetImgIdx(1);
+	}
+
+}
+
+void CChar::Focus(float ratio)
+{
+	if (m_changeFace)
+	{
+		m_iImgIdx = 0;
+	}
+
+	SetIrisPositionCenter(ratio);
+
+	if (CHANGE_IRIS)
+	{
+		if (((IRIS_CHANGE_MODE)&SCALE) == SCALE)
 		{
-			if (m_changeFace)
-			{
-				m_iImgIdx = 1;
-			}
-
-			m_pRIris->update();
-			m_pLIris->update();
-
-			if (CHANGE_IRIS)
-			{
-				if (((IRIS_CHANGE_MODE)&SCALE) == SCALE)
-				{
-					m_pRIris->SetScale(true);
-					m_pLIris->SetScale(true);
-				}
-				if (((IRIS_CHANGE_MODE)&TEXTURE) == TEXTURE)
-				{
-					m_pRIris->SetImgIdx(1);
-					m_pLIris->SetImgIdx(1);
-				}
-			}
-
-			if (m_changeSclera)
-			{
-				m_pSclera->SetImgIdx(1);
-			}
+			m_pRIris->SetScale();
+			m_pLIris->SetScale();
+			//m_pRIris->SetScale(Vec2(IRIS_SCALE_X, IRIS_SCALE_Y));
+			//m_pLIris->SetScale(Vec2(IRIS_SCALE_X, IRIS_SCALE_Y));
+		}
+		if (((IRIS_CHANGE_MODE)&TEXTURE) == TEXTURE)
+		{
+			m_pRIris->SetImgIdx(0);
+			m_pLIris->SetImgIdx(0);
 		}
 	}
 
+	if (m_changeSclera)
+	{
+		m_pSclera->SetImgIdx(0);
+	}
+}
 
+void CChar::SetIrisPositionCenter(float ratio)
+{
+	m_pRIris->SetPos(Vec2(REYE_CENTERPOS_X * ratio + (1 - ratio), REYE_CENTERPOS_Y * ratio));
+	m_pLIris->SetPos(Vec2(LEYE_CENTERPOS_X * ratio, LEYE_CENTERPOS_Y * ratio));
 }
 
 void CChar::render(HDC _dc, Gdiplus::Graphics* graphics)
@@ -143,7 +159,6 @@ void CChar::render(HDC _dc, Gdiplus::Graphics* graphics)
 	m_pSclera->render(_dc, graphics);
 	m_pRIris->render(_dc, graphics);
 	m_pLIris->render(_dc, graphics);
-
 
 	UINT iWidth = m_pTex->GetWidth();
 	UINT iHeight = m_pTex->GetHeight();
@@ -159,7 +174,10 @@ void CChar::render(HDC _dc, Gdiplus::Graphics* graphics)
 
 	// 이미지 범위를 넘어선 인덱스
 	if (iMaxCol <= iCurCol)
+	{
+		LOG("캐릭터 렌더링 인덱스 초과 오류: " + std::to_string(iCurCol) + " / " + std::to_string(iMaxCol));
 		assert(nullptr);
+	}
 
 	Vec2 vPos = GetPos();
 	Vec2 vScale = GetScale();
@@ -175,4 +193,13 @@ void CChar::render(HDC _dc, Gdiplus::Graphics* graphics)
 
 	// 이미지를 잘라서 그리기
 	graphics->DrawImage(m_pTex, destRect, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, UnitPixel);
+
+
+#ifdef _DEBUG
+	if (debug)
+	{
+		m_pRIris->DrawEllipseBoundary(_dc);
+		m_pLIris->DrawEllipseBoundary(_dc);
+	}
+#endif
 }

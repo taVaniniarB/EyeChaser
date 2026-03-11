@@ -26,3 +26,25 @@ void Safe_Delete_Map(map<T1, T2>& _map)
 
 	_map.clear();
 }
+
+
+#ifdef _DEBUG
+#define LOG(text) WriteLog(text)
+#define LOG_CLEAR() ClearLog()
+#else
+#define LOG(text) ((void)0)
+#define LOG_CLEAR() ((void)0)
+#endif
+
+inline void WriteLog(const std::string& text) {
+	std::ofstream logFile("debug_log.txt", std::ios::app);
+	if (logFile.is_open()) {
+		logFile << text << std::endl;
+		logFile.close();
+	}
+
+}
+inline void ClearLog()
+{
+	std::ofstream logFile("debug_log.txt", std::ios::trunc);
+}

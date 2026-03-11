@@ -25,4 +25,6 @@ using std::wstring;
 
 #include "define.h"
 #include "struct.h"
+
+#include <fstream>
 #include "func.h"

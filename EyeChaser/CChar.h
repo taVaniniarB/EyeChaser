@@ -17,6 +17,7 @@ private:
 	bool m_changeFace = false;
 	bool m_changeSclera = false;
 	int			m_iImgIdx;
+	bool debug = false;
 
 public:
 	void AddImgIdx()
@@ -27,6 +28,9 @@ public:
 public:
 	void init();
 	virtual void update();
+	void UnFocus();
+	void Focus(float ratio);
+	void SetIrisPositionCenter(float ratio);
 	virtual void render(HDC _dc, Gdiplus::Graphics* graphics);
 	void SetIdx(int _idx) { m_iImgIdx = _idx; }
 
