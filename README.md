@@ -15,13 +15,14 @@
 
 **우클릭 메뉴**
 
-<img src="https://imgur.com/ZmDbAm7.png" width="400">
+- <img src="https://imgur.com/ZmDbAm7.png" width="400">
 
 * Always On Top 속성 토글 (창을 항상 최상단에 표시)
 * 마우스트래킹 토글
 
 **방향키로 배경 변경**
-<img src="https://github.com/user-attachments/assets/e23f09c9-2c8c-4596-863b-03da9c14d3a5" width="400">
+
+- <img src="https://github.com/user-attachments/assets/e23f09c9-2c8c-4596-863b-03da9c14d3a5" width="400">
 
 
 ### 특징
