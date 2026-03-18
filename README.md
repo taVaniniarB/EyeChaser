@@ -4,25 +4,30 @@
 
 <img src="https://github.com/user-attachments/assets/92edb03b-c9b6-4e0b-8d67-70a2502e2c50" width="600">
 
+기술: C++, WinAPI
+
+---
 
 ### 기능
 
-**<마우스트래킹>**
+**1. 마우스트래킹**
+
+![Image](https://github.com/user-attachments/assets/01c2a733-4bda-4639-a43c-686484e33398)
 
 * 타원 방정식과 Lerp를 사용하여 눈동자의 위치 결정
 
-**<클라이언트 창 포커스 여부에 따른 텍스처 변화>**
+**2. 클라이언트 창 포커스 여부에 따른 텍스처 변화**
 
-**<우클릭 메뉴>**
+**3. 우클릭 메뉴**
 
-- <img src="https://imgur.com/ZmDbAm7.png" width="400">
+<img src="https://imgur.com/ZmDbAm7.png" width="400">
 
 * Always On Top 속성 토글 (창을 항상 최상단에 표시)
 * 마우스트래킹 토글
 
-**<방향키로 배경 변경>**
+**4. 방향키로 배경 변경**
 
-- <img src="https://github.com/user-attachments/assets/e23f09c9-2c8c-4596-863b-03da9c14d3a5" width="400">
+<img src="https://github.com/user-attachments/assets/e23f09c9-2c8c-4596-863b-03da9c14d3a5" width="400">
 
 
 ### 특징
